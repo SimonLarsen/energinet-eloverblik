@@ -36,7 +36,24 @@ class CustomerAPI:
     ) -> requests.Response:
         """
         Make a GET request using data access token.
+
+        Parameters
+        ----------
+        path : str
+            API path string.
+        params : dict
+            Request parameters as key-value pairs.
+
+        Returns
+        -------
+        requests.Response
+            Response object.
         """
+        if len(path) == 0:
+            raise ValueError("API path can't be an empty string.")
+        if path[0] != "/":
+            path = "/" + path
+
         token = self._get_access_token()
         response = requests.get(
             f"{self._api_url}{path}",
@@ -52,6 +69,29 @@ class CustomerAPI:
         data: Dict[str, Any] = None,
         json: Dict[str, Any] = None,
     ) -> requests.Response:
+        """
+        Make a POST request using data access token.
+
+        Parameters
+        ----------
+        path : str
+            API path string.
+        data : dict
+            Form-encoded parameters as key-value pairs.
+        json: dict
+            JSON parameter data. Using this parameter will change the
+            ``Content-Type`` in the header to ``application/json``.
+
+        Returns
+        -------
+        requests.Reponse
+            Response object.
+        """
+        if len(path) == 0:
+            raise ValueError("API path can't be an empty string.")
+        if path[0] != "/":
+            path = "/" + path
+
         token = self._get_access_token()
         response = requests.post(
             f"{self._api_url}{path}",
