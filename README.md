@@ -22,7 +22,7 @@ REFRESH_TOKEN = "..."
 api = CustomerAPI(REFRESH_TOKEN)
 
 meters = api.get_metering_points()
-meter_ids = [m["meteringPointId"] for m in meters]
+meter_id = meters[0]["meteringPointId"]
 
 data = api.get_time_series(
     [meter_id],
