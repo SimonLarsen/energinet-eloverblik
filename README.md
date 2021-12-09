@@ -22,12 +22,15 @@ from datetime import datetime
 REFRESH_TOKEN = "..."
 api = CustomerAPI(REFRESH_TOKEN)
 
-my_meter_id = "123456789"
-readings = api.get_meter_readings(
-    [my_meter_id],
-    datetime(2021, 1, 1),
-    datetime.now()
+meters = api.get_metering_points()
+meter_ids = [m["meteringPointId"] for m in meters]
+
+data = api.get_time_series(
+    [meter_id],
+    datetime.now()-timedelta(days=28),
+    datetime.now(),
+    "hour"
 )
 
-df = readings.data[0].to_pandas()
+df = data[0].series[0].to_pandas()
 ```
