@@ -1,11 +1,18 @@
 from setuptools import setup, find_packages
-import eloverblik
+import re
+from pathlib import Path
+
+here = Path(__file__).parent
+version = re.search(
+    r'__version__ = "(.+?)"',
+    (here / "eloverblik" / "__init__.py").read_text("utf8"),
+).group(1)
 
 
 setup(
     name="eloverblik",
     description="Python wrapper for the Eloverblik.dk API.",
-    version=eloverblik.__version__,
+    version=version,
     author="Simon J. Larsen",
     author_email="SLN@energinet.dk",
     license="MIT",
