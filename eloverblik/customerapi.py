@@ -21,7 +21,7 @@ class CustomerAPI:
     def _get_access_token(self) -> str:
         if datetime.now() - self._access_token_time > ACCESS_TOKEN_VALID_TIME:
             response = requests.get(
-                f"{self._api_url}/api/Token",
+                f"{self._api_url}/api/1/token",
                 headers={"Authorization": f"Bearer {self._refresh_token}"},
             )
             response.raise_for_status()
@@ -117,7 +117,7 @@ class CustomerAPI:
             Information for metering points.
         """
         response = self._get(
-            "/api/meteringpoints/meteringpoints",
+            "/api/1/meteringpoints/meteringpoints",
             params={"includeAll": include_all},
         )
         return response.json()["result"]
@@ -140,7 +140,7 @@ class CustomerAPI:
         """
         params = {"meteringPoints": {"meteringPoint": point_ids}}
         response = self._post(
-            "/api/meteringpoints/meteringpoint/getdetails",
+            "/api/1/meteringpoints/meteringpoint/getdetails",
             json=params,
         )
         return [e["result"] for e in response.json()["result"]]
@@ -162,7 +162,7 @@ class CustomerAPI:
         """
         params = {"meteringPoints": {"meteringPoint": point_ids}}
         response = self._post(
-            "/api/meteringpoints/meteringpoint/getcharges",
+            "/api/1/meteringpoints/meteringpoint/getcharges",
             json=params,
         )
         return [e["result"] for e in response.json()["result"]]
@@ -198,7 +198,7 @@ class CustomerAPI:
         urlEnd = end.strftime("%Y-%m-%d")
         urlAgg = aggregation.value
         response = self._post(
-            f"/api/meterdata/gettimeseries/{urlStart}/{urlEnd}/{urlAgg}",
+            f"/api/1/meterdata/gettimeseries/{urlStart}/{urlEnd}/{urlAgg}",
             json=params,
         )
         return [
@@ -233,7 +233,7 @@ class CustomerAPI:
         urlStart = start.strftime("%Y-%m-%d")
         urlEnd = end.strftime("%Y-%m-%d")
         response = self._post(
-            f"/api/meterdata/getmeterreadings/{urlStart}/{urlEnd}",
+            f"/api/1/meterdata/getmeterreadings/{urlStart}/{urlEnd}",
             json=params,
         )
         return [
