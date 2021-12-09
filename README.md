@@ -1,5 +1,4 @@
-python-eloverblik
------------------
+# python-eloverblik [![Test](https://github.com/SimonLarsen/energinet-eloverblik/actions/workflows/test.yml/badge.svg)](https://github.com/SimonLarsen/energinet-eloverblik/actions/workflows/test.yml) ![MIT License](https://img.shields.io/badge/license-MIT%20License-blue.svg)
 
 A Python wrapper for the Eloverblik.dk API.
 
