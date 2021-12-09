@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime, timedelta
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Union
 from eloverblik.time_series import TimeSeries
 from eloverblik.aggregation import Aggregation
 from eloverblik.meter_reading import MeterReading
@@ -138,6 +138,9 @@ class CustomerAPI:
         list of dictionaries
             List of dictionaries with metering point details.
         """
+        if type(point_ids) != list:
+            raise ValueError("point_ids must be a list.")
+
         params = {"meteringPoints": {"meteringPoint": point_ids}}
         response = self._post(
             "/api/1/meteringpoints/meteringpoint/getdetails",
@@ -160,6 +163,9 @@ class CustomerAPI:
         list of dictionaries
             List of dictionaries with price data.
         """
+        if type(point_ids) != list:
+            raise ValueError("point_ids must be a list.")
+
         params = {"meteringPoints": {"meteringPoint": point_ids}}
         response = self._post(
             "/api/1/meteringpoints/meteringpoint/getcharges",
@@ -172,7 +178,7 @@ class CustomerAPI:
         point_ids: List[str],
         start: datetime,
         end: datetime,
-        aggregation: Aggregation,
+        aggregation: Union[Aggregation, str],
     ) -> List[TimeSeries]:
         """
         Get time series for a list of metering points.
@@ -185,7 +191,7 @@ class CustomerAPI:
             Series period start.
         end : datetime
             Series period end.
-        aggregation : eloverblik.Aggregation
+        aggregation : eloverblik.Aggregation or str
             Data aggregation resolution.
 
         Returns
@@ -193,10 +199,22 @@ class CustomerAPI:
         list of TimeSeries objects
             A list of TimeSeries objects for each metering point.
         """
-        params = {"meteringPoints": {"meteringPoint": point_ids}}
+        if type(point_ids) != list:
+            raise ValueError("point_ids must be a list.")
+
+        if type(aggregation) == str:
+            if aggregation.upper() not in Aggregation.__members__.keys():
+                raise ValueError(f"Invalid aggregation value '{aggregation}'.")
+            aggregation = Aggregation[aggregation.upper()]
+        elif type(aggregation) != Aggregation:
+            raise ValueError(
+                "Aggregation must be of type 'str' or 'Aggregation'."
+            )
+
         urlStart = start.strftime("%Y-%m-%d")
         urlEnd = end.strftime("%Y-%m-%d")
         urlAgg = aggregation.value
+        params = {"meteringPoints": {"meteringPoint": point_ids}}
         response = self._post(
             f"/api/1/meterdata/gettimeseries/{urlStart}/{urlEnd}/{urlAgg}",
             json=params,
@@ -229,6 +247,9 @@ class CustomerAPI:
         list of MeterReading objects
             A list of MeterReading objects for eact metering point.
         """
+        if type(point_ids) != list:
+            raise ValueError("point_ids must be a list.")
+
         params = {"meteringPoints": {"meteringPoint": point_ids}}
         urlStart = start.strftime("%Y-%m-%d")
         urlEnd = end.strftime("%Y-%m-%d")
