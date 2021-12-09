@@ -30,7 +30,10 @@ class Table:
 
     def to_pandas(self) -> pd.DataFrame:
         """Convert time series table to a Pandas data frame."""
-        return pd.DataFrame(self.data)
+        df = pd.DataFrame(self.data)
+        offsets = (df["position"] - 1) * pd.to_timedelta(df["resolution"])
+        df = df.assign(time=lambda df: df.start + offsets)
+        return df
 
 
 class TimeSeries:
