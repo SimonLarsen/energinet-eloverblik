@@ -16,7 +16,7 @@ pip install .
 
 ```python
 from eloverblik import CustomerAPI
-from datetime import datetime
+from datetime import datetime, timedelta
 
 REFRESH_TOKEN = "..."
 api = CustomerAPI(REFRESH_TOKEN)
